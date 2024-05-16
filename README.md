@@ -1,7 +1,24 @@
+# ENSAE Paris | Institut Polytechnique de Paris
+
+<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/LOGO-ENSAE.png/900px-LOGO-ENSAE.png" width="300">
+
 projet PPML
 ==============================
 
 Optimize a machine learning model by fusing operations.
+
+
+## Course : Parallel programming for Machine Learning
+### Xavier Dupré and Matthieu Durut.
+### Academic year: 2023-2024
+
+
+If you want to run it manually on your computer, then follow the step bellow :
+
+Clone this repository, then install the requirements library
+```python
+pip install -r requirements.txt
+```
 
 Project Organization
 ------------
@@ -50,7 +67,6 @@ Project Organization
     │       └── visualize.py
     │
     └── tox.ini            <- tox file with settings for running tox; see tox.readthedocs.io
-
 
 --------
 
