@@ -4,6 +4,8 @@ import torch
 import triton
 import triton.language as tl
 
+import itertools
+
 # %%
 # Triple mul. kernel
 
@@ -11,7 +13,16 @@ import triton.language as tl
 def naive_triple_mul(A,B,C):
     return A*B*C
 
+def get_autotune_config():
+    return [
+        triton.Config({"BLOCK_SIZE":2**i},num_stages=j,num_warps=k) for i,j,k in itertools.product([7,8,9,10],[3,4,5],[2,4,8])
+    ]
+
 # Inspired by Triton tutorials
+@triton.autotune(
+    configs=get_autotune_config(),
+    key = ["n_elements"]
+)
 @triton.jit
 def triple_mul_kernel(A_ptr,
                B_ptr,
@@ -37,7 +48,7 @@ def triple_mul(A,
     assert A.is_cuda and B.is_cuda and C.is_cuda and output.is_cuda
     n_elements = output.numel()
     grid = lambda meta: (triton.cdiv(n_elements, meta['BLOCK_SIZE']), )
-    triple_mul_kernel[grid](A, B, C, output, n_elements, BLOCK_SIZE=1024)
+    triple_mul_kernel[grid](A, B, C, output, n_elements)
     return output
 
 
@@ -68,7 +79,7 @@ print(f'The maximum difference between torch and triton is '
 @triton.testing.perf_report(
     triton.testing.Benchmark(
         x_names=['size'],  # Argument names to use as an x-axis for the plot.
-        x_vals=[2**i for i in range(6, 10, 1)],  # Different possible values for `x_name`.
+        x_vals=[2**i for i in range(6, 13, 1)],  # Different possible values for `x_name`.
         x_log=True,  # x axis is logarithmic.
         line_arg='provider',  # Argument name whose value corresponds to a different line in the plot.
         line_vals=['triton', 'torch'],  # Possible values for `line_arg`.
