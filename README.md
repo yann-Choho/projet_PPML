@@ -24,7 +24,7 @@ Clone this repository, then install the requirements library
 pip install -r requirements.txt
 ```
 
-We mainly used le library Triton which requires Linux system : you can then Install WSL for Windows user 
+We mainly used the library Triton which requires Linux system : you can then Install WSL for Windows user 
 
 Project Organization
 ------------
