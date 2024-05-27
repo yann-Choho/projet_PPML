@@ -42,20 +42,15 @@ Project Organization
     │
     ├── notebooks          <- Jupyter notebooks for the project. 
     │
-    ├── references         <- Manuals, Blogs on the subject, list of repo used and all other explanatory materials.
-    │
     ├── reports            <- Generated analysis as PDF.
-    │   └── figures        <- Generated graphics and figures to be used in reporting
     │
     ├── requirements.txt   <- The requirements file for reproducing the analysis environment, e.g.
     │                         generated with `pip freeze > requirements.txt`
     │
     ├── setup.py           <- makes project pip installable (pip install -e .) so src can be imported
     ├── src                <- Source code for use in this project.
-    │   ├── __init__.py    <- Makes src a Python module
-    │   │
-    │   │
-    │   └── models         <- Scripts to train models and then use trained models to make
+        └── __init__.py    <- Makes src a Python module
+
 
 --------
 
