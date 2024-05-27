@@ -1,9 +1,5 @@
 [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](http://opensource.org/licenses/MIT)
 
-[![GitHub Issues](http://img.shields.io/github/issues/sdpython/teachcompute.svg)]([https://github.com/yann-Choho/projet_PPML](https://github.com/yann-Choho/projet_PPML/issues)/)
-
-[![Code Style: Black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
-
 # ENSAE Paris | Institut Polytechnique de Paris
 
 <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/LOGO-ENSAE.png/900px-LOGO-ENSAE.png" width="300">
