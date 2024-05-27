@@ -2,8 +2,6 @@
 
 [![GitHub Issues](http://img.shields.io/github/issues/sdpython/teachcompute.svg)]([https://github.com/yann-Choho/projet_PPML](https://github.com/yann-Choho/projet_PPML/issues)/)
 
-[![Repo Size](https://img.shields.io/github/repo-size/sdpython/teachcompute)](https://github.com/yann-Choho/projet_PPML)
-
 [![Code Style: Black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
 # ENSAE Paris | Institut Polytechnique de Paris
