@@ -1,6 +1,21 @@
+.. image:: https://img.shields.io/badge/license-MIT-blue.svg
+    :alt: MIT License
+    :target: http://opensource.org/licenses/MIT
+
+.. image:: http://img.shields.io/github/issues/sdpython/teachcompute.svg
+    :alt: GitHub Issues
+    :target: https://github.com/sdpython/teachcompute/issues
+.. image:: https://img.shields.io/github/repo-size/sdpython/teachcompute
+    :target: https://github.com/sdpython/teachcompute/
+    :alt: size
+
+.. image:: https://img.shields.io/badge/code%20style-black-000000.svg
+    :target: https://github.com/psf/black
+    
 # ENSAE Paris | Institut Polytechnique de Paris
 
 <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/LOGO-ENSAE.png/900px-LOGO-ENSAE.png" width="300">
+
 
 projet PPML
 ==============================
