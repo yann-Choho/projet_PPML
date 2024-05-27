@@ -41,14 +41,20 @@ Project Organization
     │
     │
     ├── notebooks          <- Jupyter notebooks for the project. 
+    │     ├── pytorch_kernel.py       <- kernel for Llama in pytorch 
+    │     ├── triton_kernel.py        <- kernel for Llama in triton 
+    │     ├── isolate_kernel.ipynb    <- notebook with explanation of our approach
+    │     ├── utils.py                <- usefull python function for the kernel
+    │     ├── figures                 <- figures produced after lauching the experiment (not alway reproductible)
+    │     └── outputs                 <- other ouptut due to experiment 
     │
-    ├── reports            <- Generated analysis as PDF.
+    ├── reports            <- our report explaining our approach, results and conclusion as PDF.
     │
     ├── requirements.txt   <- The requirements file for reproducing the analysis environment, e.g.
     │                         generated with `pip freeze > requirements.txt`
     │
     ├── setup.py           <- makes project pip installable (pip install -e .) so src can be imported
-    ├── src                <- Source code for use in this project.
+    ├── src                <- Source code for use in this project. (just from cookiecutter :not realy used)
         └── __init__.py    <- Makes src a Python module
 
 
