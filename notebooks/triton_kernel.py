@@ -54,18 +54,18 @@ def triple_mul(A,
 
 # %%
 # Correctness
-
-torch.manual_seed(0)
-size = 314
-A = torch.rand((size,size), device='cuda')
-B = torch.rand((size,size), device='cuda')
-C = torch.rand((size,size), device='cuda')
-output_torch = A*B*C
-output_triton = triple_mul(A, B, C)
-print(output_torch)
-print(output_triton)
-print(f'The maximum difference between torch and triton is '
-      f'{torch.max(torch.abs(output_torch - output_triton))}')
+if __name__ == "__main__":
+    torch.manual_seed(0)
+    size = 314
+    A = torch.rand((size,size), device='cuda')
+    B = torch.rand((size,size), device='cuda')
+    C = torch.rand((size,size), device='cuda')
+    output_torch = A*B*C
+    output_triton = triple_mul(A, B, C)
+    print(output_torch)
+    print(output_triton)
+    print(f'The maximum difference between torch and triton is '
+          f'{torch.max(torch.abs(output_torch - output_triton))}')
 
 # %%
 # Benchmark
@@ -105,7 +105,8 @@ def benchmark(size, provider):
 # %%
 # We can now run the decorated function above. Pass `print_data=True` to see the performance number, `show_plots=True` to plot them, and/or
 # `save_path='/path/to/results/' to save them to disk along with raw CSV data:
-benchmark.run(print_data=True, show_plots=True)
+if __name__ == "__main__":
+    benchmark.run(print_data=True, show_plots=True)
 
 # %%
 # GLU kernel
