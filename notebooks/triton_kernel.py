@@ -120,8 +120,17 @@ benchmark.run(print_data=True, show_plots=True)
 # def glu_kernel(X, G, L, U):  # other kwargs
 #     pass
 
-# % MLP Fused kernel
+def get_autotune_config():
+    return [
+        triton.Config({"BLOCK_SIZE_M": 2**i, "BLOCK_SIZE_N": 2**i, "BLOCK_SIZE_K": 64}, num_stages=j, num_warps=k)
+        for i, j, k in itertools.product([4, 5, 6], [2, 3, 4], [2, 4, 8])
+    ]
 
+# % MLP Fused kernel
+@triton.autotune(
+    configs=get_autotune_config(),
+    key=['M', 'N', 'K']
+)
 @triton.jit
 def ff_llama(
     a_ptr, w1_ptr, w3_ptr, out_ptr,
@@ -208,8 +217,8 @@ def kernel_ff(x: torch.Tensor, w1: torch.Tensor, w3: torch.Tensor) -> torch.Tens
         *out.stride(),
         USE_FP8=w1_t.dtype != torch.float16,
         EPS=1e-6,
-        BLOCK_SIZE_M=16, BLOCK_SIZE_N=16, BLOCK_SIZE_K=64,
-        num_stages=2, num_warps=4
+        #BLOCK_SIZE_M=16, BLOCK_SIZE_N=16, BLOCK_SIZE_K=64, #already defined in autotune
+        #num_stages=2, num_warps=4
     )
     out = out.view(batch, seq_len, -1)
     return out
@@ -218,7 +227,17 @@ def kernel_ff(x: torch.Tensor, w1: torch.Tensor, w3: torch.Tensor) -> torch.Tens
 # %%
 # MLP Fused kernel WITH RMS NORM
 
+def get_autotune_config():
+    return [
+        triton.Config({"BLOCK_SIZE_M": 2**i, "BLOCK_SIZE_N": 2**i, "BLOCK_SIZE_K": 64}, num_stages=j, num_warps=k)
+        for i, j, k in itertools.product([4, 5, 6], [2, 3, 4], [2, 4, 8])
+    ]
 
+# % MLP Fused kernel
+@triton.autotune(
+    configs=get_autotune_config(),
+    key=['M', 'N', 'K']
+)
 @triton.jit
 def ff_llama_with_rmsnorm(
     a_ptr, w1_ptr, w3_ptr, out_ptr, rms_w_ptr,
@@ -357,8 +376,8 @@ def kernel_ff_with_rmsnorm(x: torch.Tensor, w1: torch.Tensor, w3: torch.Tensor, 
         *rms_w.stride(),
         USE_FP8=w1_t.dtype != torch.float16,
         EPS=1e-6,
-        BLOCK_SIZE_M=16, BLOCK_SIZE_N=16, BLOCK_SIZE_K=64,
-        num_stages=2, num_warps=4
+        #BLOCK_SIZE_M=16, BLOCK_SIZE_N=16, BLOCK_SIZE_K=64,
+        #num_stages=2, num_warps=4
     )
     out = out.view(batch, seq_len, -1)
     return out
