@@ -1,3 +1,9 @@
+"""
+Code modified from different sources:
+
+* https://github.com/ELS-RD/kernl/tree/main/experimental/llama-v2
+"""
+
 from typing import List, Optional
 
 import triton
@@ -8,6 +14,9 @@ torch.manual_seed(123)
 
 
 def find_last_one_index(lst: List[int]) -> Optional[int]:
+    """
+    Find the index of the last 1 in a list of integers.
+    """
     index = len(lst) - 1
     while index >= 0:
         if lst[index] == 1:
@@ -18,6 +27,9 @@ def find_last_one_index(lst: List[int]) -> Optional[int]:
 
 
 def f8_to_f16(x, dtypes=tl.float8e5) -> torch.Tensor:
+    """
+    Convert a torch.int8 tensor to torch.float16.
+    """
     assert x.dtype == torch.int8, f"torch.int8 expected but got {x.dtype}"
     assert "cuda" in str(x.device), f"CUDA tensors only but got {x.device}"
 
@@ -38,6 +50,9 @@ def f8_to_f16(x, dtypes=tl.float8e5) -> torch.Tensor:
 
 
 def f16_to_f8(x: torch.Tensor, dtypes=tl.float8e5) -> torch.Tensor:
+    """
+    Convert a torch.float16 tensor to torch.int8.
+    """
     assert x.dtype in [torch.float16, torch.float32]
     assert "cuda" in str(x.device), f"CUDA tensors only but got {x.device}"
 
@@ -55,35 +70,8 @@ def f16_to_f8(x: torch.Tensor, dtypes=tl.float8e5) -> torch.Tensor:
     kernel[grid](triton.reinterpret(ret, dtypes), x, numel, BLOCK_SIZE=1024)
     return ret
 
-
-class FakeLinear(torch.nn.Module):
-    def __init__(self, weight: torch.Tensor):
-        super().__init__()
-        self.weight = weight
-
-    def forward(self, *args, **kwargs):
-        raise Exception("should not be used")
-
-
-def get_model_fp8(parent_module: torch.nn.Module) -> None:
-    from llama.model import Attention, RMSNorm
-
-    for name, module in parent_module.named_children():
-        if isinstance(module, Attention):
-            module.cache_v = f16_to_f8(module.cache_v)
-            module.cache_k = f16_to_f8(module.cache_k)
-
-        if isinstance(module, RMSNorm) or isinstance(module, torch.nn.Linear):
-            if name not in ["norm", "wo", "w2", "output", "lm_head"]:
-                assert module.weight.abs().max() < 431
-                weight_fp8 = f16_to_f8(module.weight.data)
-                m = FakeLinear(weight=weight_fp8)
-                setattr(parent_module, name, m)
-
-        get_model_fp8(module)  # Recursion for nested modules
-
-
-for _ in range(100):
+# Test
+for _ in range(20):
     a = torch.randn((16, 128), dtype=torch.float16, device="cuda")
     b = f16_to_f8(a, dtypes=tl.float8e5)
     c = f8_to_f16(b, dtypes=tl.float8e5) + 1e-4

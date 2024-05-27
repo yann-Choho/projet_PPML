@@ -7,6 +7,35 @@ def rms_norm_pytorch(x: torch.Tensor, rms_w: torch.Tensor, eps=1e-6) -> torch.Te
     x = x * torch.rsqrt(x.pow(2).mean(-1, keepdim=True) + eps)
     return x * rms_w
 
+def ff_pytorch(x: torch.Tensor, w1: torch.Tensor, w3: torch.Tensor) -> torch.Tensor:
+    a = torch.nn.functional.silu(torch.matmul(x, w1.t()))
+    b = torch.matmul(x, w3.t())
+    return a * b
+
+# PyTorch equivalent operations for comparison
+# x_norm_p = rms_norm_pytorch(x, rms_w, eps=1e-6)
+# w1_p = x_norm_p @ w1_w.t()
+# w1_silu_p = torch.nn.functional.silu(w1_p)
+# w3_p = x_norm_p @ w3_w.t()
+
+def ff_pytorch_with_rmsnorm(x: torch.Tensor, w1: torch.Tensor, w3: torch.Tensor, rms_w: torch.Tensor) -> torch.Tensor:
+    """
+    A reference PyTorch implementation of the feed-forward operation.
+
+    Args:
+        x: Input tensor.
+        w1: First weight tensor.
+        w3: Third weight tensor.
+        rms_w: RMS normalization weight tensor.
+
+    Returns:
+        Output tensor after applying the feed-forward transformation.
+    """
+
+    x_norm = rms_norm_pytorch(x, rms_w, eps=1e-6)
+    a = torch.nn.functional.silu(torch.matmul(x_norm, w1.t()))
+    b = torch.matmul(x_norm, w3.t())
+    return a * b
 
 def reshape_for_broadcast_pytorch(freqs_cis: torch.Tensor, x: torch.Tensor):
     ndim = x.ndim
